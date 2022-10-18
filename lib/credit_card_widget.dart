@@ -30,6 +30,7 @@ class CreditCardWidget extends StatefulWidget {
       this.textStyle,
       this.cardBgColor = const Color(0xff1b447b),
       this.obscureCardNumber = true,
+      this.obscureFirst4Digits = false,
       this.obscureCardCvv = true,
       this.labelCardHolder = 'CARD HOLDER',
       this.labelExpiredDate = 'MM/YY',
@@ -57,6 +58,7 @@ class CreditCardWidget extends StatefulWidget {
   final double? height;
   final double? width;
   final bool obscureCardNumber;
+  final bool obscureFirst4Digits;
   final bool obscureCardCvv;
   final void Function(CreditCardBrand) onCreditCardWidgetChange;
   final bool isHolderNameVisible;
@@ -244,15 +246,26 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     if (widget.obscureCardNumber) {
       final String stripped = number.replaceAll(RegExp(r'[^\d]'), '');
       if (stripped.length > 8) {
-        final String middle = number
-            .substring(4, number.length - 5)
-            .trim()
-            .replaceAll(RegExp(r'\d'), '*');
-        number = stripped.substring(0, 4) +
-            ' ' +
-            middle +
-            ' ' +
-            stripped.substring(stripped.length - 4);
+        String obscureNumber;
+        if (widget.obscureFirst4Digits) {
+          number
+              .substring(0, number.length - 5)
+              .trim()
+              .replaceAll(RegExp(r'\d'), '*');
+          number = obscureNumber +
+              ' ' +
+              stripped.substring(stripped.length - 4);
+        } else {
+          number
+              .substring(4, number.length - 5)
+              .trim()
+              .replaceAll(RegExp(r'\d'), '*');
+          number = stripped.substring(0, 4) +
+              ' ' +
+              obscureNumber +
+              ' ' +
+              stripped.substring(stripped.length - 4);
+        }
       }
     }
     return CardBackground(
