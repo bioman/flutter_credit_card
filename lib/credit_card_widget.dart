@@ -246,9 +246,9 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     if (widget.obscureCardNumber) {
       final String stripped = number.replaceAll(RegExp(r'[^\d]'), '');
       if (stripped.length > 8) {
-        String obscureNumber;
+        String obscureNumber = "";
         if (widget.obscureFirst4Digits) {
-          number
+          obscureNumber = number
               .substring(0, number.length - 5)
               .trim()
               .replaceAll(RegExp(r'\d'), '*');
@@ -256,7 +256,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               ' ' +
               stripped.substring(stripped.length - 4);
         } else {
-          number
+          obscureNumber = number
               .substring(4, number.length - 5)
               .trim()
               .replaceAll(RegExp(r'\d'), '*');
